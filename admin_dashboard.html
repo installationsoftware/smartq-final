@@ -4,159 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartQ Admin</title>
-    <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    
     <style>
-        :root {
-            --brand-color: #2563eb; 
-            --brand-dark: #1e40af;
-            --brand-light: #eff6ff;
-            --bg-gradient: radial-gradient(circle at top center, #f1f5f9, #e2e8f0);
-        }
+        :root { --brand-color: #4f46e5; --bg-gradient: radial-gradient(circle at top center, #f8fafc, #e2e8f0); }
         body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--bg-gradient); color: #1e293b; min-height: 100vh; }
-        .screen { max-width: 480px; margin: 0 auto; padding: 20px; position: relative; }
-
-        /* HEADER */
-        .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .icon-btn {
-            width: 45px; height: 45px; border-radius: 50%; background: white;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; color: #1e293b;
-        }
-
-        /* CARDS */
+        .screen { max-width: 480px; margin: 0 auto; padding: 20px; }
+        
         .card { background: white; border-radius: 25px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; }
-
-        .token-card {
-            text-align: center; position: relative; overflow: hidden; padding: 40px 20px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        }
+        .token-card { text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); }
         .big-token { font-size: 5rem; font-weight: 800; color: var(--brand-color); line-height: 1; letter-spacing: -2px; }
         
-        /* CONTROLS */
         .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .btn-control {
-            padding: 20px; border-radius: 25px; border: none; font-size: 1rem;
-            font-weight: 700; cursor: pointer; color: white;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+        .btn-control { padding: 20px; border-radius: 25px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .btn-control:active { transform: scale(0.97); }
-        
-        .btn-next { 
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); 
-            grid-column: span 2; font-size: 1.2rem; padding: 25px;
-        }
+        .btn-next { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); grid-column: span 2; font-size: 1.2rem; padding: 25px; }
         .btn-skip { background: #fbbf24; color: #78350f; }
         .btn-prev { background: white; color: var(--brand-color); border: 2px solid #e0e7ff; }
-        
-        /* TOGGLE */
-        .switch-card { display: flex; align-items: center; justify-content: space-between; }
-        .toggle-btn {
-            width: 55px; height: 30px; background: #cbd5e1; border-radius: 30px;
-            position: relative; transition: 0.3s; cursor: pointer;
-        }
-        .toggle-circle {
-            width: 26px; height: 26px; background: white; border-radius: 50%;
-            position: absolute; top: 2px; left: 2px; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .active-toggle { background: var(--brand-color); }
-        .active-circle { left: 27px; }
 
-        /* MODALS */
+        .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .icon-btn { width: 45px; height: 45px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; color: #1e293b; }
+
+        .switch-card { display: flex; align-items: center; justify-content: space-between; }
+        .toggle-btn { width: 55px; height: 30px; background: #cbd5e1; border-radius: 30px; position: relative; transition: 0.3s; cursor: pointer; }
+        .toggle-circle { width: 26px; height: 26px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: 0.3s; }
+        .active-toggle { background: var(--brand-color); } .active-circle { left: 27px; }
+
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: flex; align-items: end; justify-content: center; backdrop-filter: blur(5px); }
         .hidden { display: none; }
-        .bottom-sheet { background: white; width: 100%; max-width: 480px; padding: 30px; border-radius: 30px 30px 0 0; animation: slideUp 0.3s ease-out; }
+        .bottom-sheet { background: white; width: 100%; max-width: 480px; padding: 30px; border-radius: 30px 30px 0 0; animation: slideUp 0.3s ease-out; display: flex; flex-direction: column; max-height: 85vh; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        .input-field { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1; margin-top: 5px; margin-bottom: 15px; font-family: inherit; }
+        
+        .input-field { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1; margin: 5px 0 15px 0; font-family: inherit; }
         .btn-primary { background: var(--brand-color); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: 600; cursor: pointer; }
+
+        #fullHistoryList { overflow-y: auto; flex-grow: 1; margin-bottom: 20px; }
+        .history-row { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #f1f5f9; align-items: center; }
+        .date-badge { font-size: 0.7rem; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; color: #64748b; display: block; margin-top: 4px; }
+        .archive-folder { background: #eef2ff; padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; color: var(--brand-color); }
     </style>
 </head>
 <body>
-
     <div class="screen">
-        
         <div class="app-header">
-            <div class="icon-btn" onclick="openProfile()">
-                <i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--brand-color);"></i>
-            </div>
-            
-            <div id="headerTitle" style="font-weight: 800; font-size: 1.1rem; color: #1e293b;">
-                Admin Panel
-            </div>
-
-            <div class="icon-btn" onclick="showQRCode()">
-                <i class="fas fa-qrcode"></i>
-            </div>
+            <div class="icon-btn" onclick="openProfile()"><i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--brand-color);"></i></div>
+            <div id="headerTitle" style="font-weight: 800; font-size: 1.1rem; color: #1e293b;">Admin Panel</div>
+            <div class="icon-btn" onclick="showQRCode()"><i class="fas fa-qrcode"></i></div>
         </div>
 
         <div class="card switch-card">
-            <div>
-                <div style="font-weight: 700;">Queue Status</div>
-                <div id="statusText" style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">CLOSED</div>
-            </div>
-            <div id="shopToggle" class="toggle-btn" onclick="toggleShop()">
-                <div id="toggleCircle" class="toggle-circle"></div>
-            </div>
+            <div><div style="font-weight: 700;">Queue Status</div><div id="statusText" style="font-size: 0.8rem; font-weight: 600; color: #94a3b8;">CLOSED</div></div>
+            <div id="shopToggle" class="toggle-btn" onclick="toggleShop()"><div id="toggleCircle" class="toggle-circle"></div></div>
         </div>
 
         <div class="card token-card">
             <div style="text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; color: #94a3b8; font-weight: 700;">Serving Token</div>
             <div id="mainToken" class="big-token">--</div>
-            <div id="waitingCount" style="margin-top: 15px; color: var(--brand-color); font-weight: 700; background: #eff6ff; display: inline-block; padding: 8px 18px; border-radius: 20px; font-size: 0.8rem;">
-                0 Waiting
-            </div>
+            <div id="waitingCount" style="margin-top: 15px; color: var(--brand-color); font-weight: 700; background: #eff6ff; display: inline-block; padding: 8px 18px; border-radius: 20px; font-size: 0.8rem;">0 Waiting</div>
         </div>
 
         <div class="controls-grid">
-            <button class="btn-control btn-next" onclick="controlQueue('next')">
-                <span>NEXT CUSTOMER</span>
-                <i class="fas fa-arrow-right"></i>
-            </button>
-            <button class="btn-control btn-prev" onclick="controlQueue('prev')">
-                <i class="fas fa-undo"></i> Prev
-            </button>
-            <button class="btn-control btn-skip" onclick="controlQueue('skip')">
-                <i class="fas fa-step-forward"></i> Skip
-            </button>
+            <button class="btn-control btn-next" onclick="controlQueue('next')"><span>NEXT CUSTOMER</span><i class="fas fa-arrow-right"></i></button>
+            <button class="btn-control btn-prev" onclick="controlQueue('prev')"><i class="fas fa-undo"></i> Prev</button>
+            <button class="btn-control btn-skip" onclick="controlQueue('skip')"><i class="fas fa-step-forward"></i> Skip</button>
         </div>
 
-        <div style="font-weight: 700; margin-bottom: 10px; color: #334155;">Today's Log</div>
-        <div id="queueList" style="padding-bottom: 30px;">
-            <div style="text-align: center; color: #94a3b8; padding: 20px;">No customers yet</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="font-weight: 700; color: #334155;">Today's Log</div>
+            <div style="color: var(--brand-color); font-size: 0.9rem; font-weight: 600; cursor: pointer;" onclick="openHistoryModal()">View All / Archives</div>
         </div>
-
+        <div id="queueList" style="padding-bottom: 30px;"><div style="text-align: center; color: #94a3b8; padding: 20px;">No customers yet</div></div>
     </div>
 
     <div id="profileModal" class="modal-overlay hidden" onclick="if(event.target === this) closeProfile()">
         <div class="bottom-sheet">
             <h3 style="margin-top: 0;">Business Profile</h3>
-            
-            <div style="text-align: left;">
-                <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">Shop Name</label>
-                <input id="settingOrgName" type="text" class="input-field" placeholder="e.g. Bachi Cakes">
-                
-                <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">Avg Wait Time (mins)</label>
-                <input id="settingTime" type="number" class="input-field" placeholder="5">
-            </div>
-
+            <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">Shop Name</label>
+            <input id="settingOrgName" type="text" class="input-field" placeholder="e.g. Bachi Cakes">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #64748b;">Avg Wait Time (mins)</label>
+            <input id="settingTime" type="number" class="input-field" placeholder="5">
             <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
-            
-            <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <hr style="margin: 20px 0; width:100%; border: none; border-top: 1px solid #e2e8f0;">
+            <button onclick="resetDay()" style="width:100%; padding: 15px; border: 1px solid #ef4444; color: #ef4444; background: white; border-radius: 12px; font-weight: 600; cursor: pointer;"><i class="fas fa-redo"></i> Start New Day</button>
+            <button onclick="logout()" style="width:100%; margin-top: 10px; padding: 15px; color: #64748b; background: none; border: none; font-weight: 600; cursor: pointer;">Log Out</button>
+        </div>
+    </div>
 
-            <button onclick="resetDay()" style="width:100%; padding: 15px; border: 1px solid #ef4444; color: #ef4444; background: white; border-radius: 12px; font-weight: 600; cursor: pointer;">
-                <i class="fas fa-redo"></i> Reset Queue to 0
-            </button>
-            
-            <button onclick="logout()" style="width:100%; margin-top: 10px; padding: 15px; color: #64748b; background: none; border: none; font-weight: 600; cursor: pointer;">
-                Log Out
-            </button>
+    <div id="historyModal" class="modal-overlay hidden" onclick="if(event.target === this) document.getElementById('historyModal').classList.add('hidden')">
+        <div class="bottom-sheet">
+            <h3 style="margin-top: 0;" id="historyTitle">Today's History</h3>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button onclick="showTodayHistory()" style="flex:1; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; background: white; font-weight: 600; cursor: pointer;">Today</button>
+                <button onclick="showArchives()" style="flex:1; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; font-weight: 600; cursor: pointer;">Past Records</button>
+            </div>
+            <div id="fullHistoryList">Loading...</div>
+            <button onclick="document.getElementById('historyModal').classList.add('hidden')" style="background:none; border:none; color: #64748b; padding: 10px; font-weight:600;">Close</button>
         </div>
     </div>
 
@@ -170,7 +114,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, update, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, update, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyCYMTf26H1JRlA1QRJjzzlBmnQozLBzf0U", authDomain: "smartq-app-7807b.firebaseapp.com", projectId: "smartq-app-7807b", databaseURL: "https://smartq-app-7807b-default-rtdb.firebaseio.com/" };
@@ -183,7 +127,7 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) { adminId = user.uid; loadDashboard(); } 
-            else { window.location.href = "index.html"; }
+            else { window.location.replace("index.html"); } // Replace ensures no "Forward" button history
         });
 
         function loadDashboard() {
@@ -196,26 +140,19 @@
         }
 
         function updateUI(data) {
-            // Header Title
             document.getElementById('headerTitle').innerText = data.name || "Admin Panel";
-
-            // Toggle
-            const toggle = document.getElementById('shopToggle');
-            const circle = document.getElementById('toggleCircle');
-            const text = document.getElementById('statusText');
+            const toggle = document.getElementById('shopToggle'); const circle = document.getElementById('toggleCircle'); const text = document.getElementById('statusText');
             if(data.isOpen) { toggle.classList.add('active-toggle'); circle.classList.add('active-circle'); text.innerText = "OPEN"; text.style.color = "var(--brand-color)"; } 
             else { toggle.classList.remove('active-toggle'); circle.classList.remove('active-circle'); text.innerText = "CLOSED"; text.style.color = "#94a3b8"; }
 
-            // Tokens
             document.getElementById('mainToken').innerText = "#" + (data.current || 0);
             const waiting = (data.lastToken || 0) - (data.current || 0);
             document.getElementById('waitingCount').innerText = (waiting > 0 ? waiting : 0) + " Waiting";
 
-            // History List
             const list = document.getElementById('queueList');
             if(data.history) {
                 list.innerHTML = "";
-                Object.values(data.history).reverse().slice(0, 5).forEach(item => {
+                Object.values(data.history).reverse().slice(0, 3).forEach(item => {
                     const row = document.createElement('div');
                     row.style.cssText = "background:white; padding:15px; border-radius:15px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; box-shadow:0 2px 5px rgba(0,0,0,0.02);";
                     row.innerHTML = `<span style="font-weight:700;">#${item.num}</span> <span style="color:#64748b; font-size:0.9rem;">${item.time}</span>`;
@@ -224,7 +161,6 @@
             } else { list.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px;">No customers yet</div>'; }
         }
 
-        // --- CONTROLS ---
         window.toggleShop = () => { if(currentData) update(ref(db, 'admins/' + adminId), { isOpen: !currentData.isOpen }); }
 
         window.controlQueue = (action) => {
@@ -232,51 +168,54 @@
             let updates = {};
             let newNum = currentData.current;
             if(action === 'next' || action === 'skip') {
-                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                updates[`history/${newNum}`] = { num: newNum, time: time };
+                const now = new Date();
+                updates[`history/${newNum}`] = { num: newNum, time: now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), date: now.toDateString() };
+                if(currentData.tokens && currentData.tokens[newNum]) { updates[`history/${newNum}`].name = currentData.tokens[newNum].name; }
             }
             if(action === 'next') newNum = (currentData.current || 0) + 1;
             else if(action === 'prev') { if(newNum > 0) newNum = newNum - 1; }
             else if(action === 'skip') { updates[`skipped/${newNum}`] = true; newNum = newNum + 1; }
-            
             updates['current'] = newNum;
             update(ref(db, 'admins/' + adminId), updates);
         }
 
         window.resetDay = () => {
-            if(confirm("⚠️ Start a new day? (Counters will reset)")) {
-                 update(ref(db, 'admins/' + adminId), { current: 0, lastToken: 0, history: null, skipped: null });
-                 closeProfile();
+            if(confirm("Start new day? Today's history will be saved to archives.")) {
+                get(ref(db, 'admins/' + adminId + '/history')).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const historyData = snapshot.val();
+                        const dateKey = new Date().toISOString().split('T')[0];
+                        update(ref(db, 'admins/' + adminId + '/archives/' + dateKey), historyData)
+                        .then(() => { alert("✅ Archived!"); wipeData(); });
+                    } else { alert("ℹ️ No data to archive."); wipeData(); }
+                });
             }
         }
-
-        // --- PROFILE & SETTINGS ---
-        window.openProfile = () => {
-            document.getElementById('profileModal').classList.remove('hidden');
-            if(currentData) {
-                document.getElementById('settingOrgName').value = currentData.name || "";
-                document.getElementById('settingTime').value = currentData.avgTime || 5;
-            }
-        }
-        window.closeProfile = () => document.getElementById('profileModal').classList.add('hidden');
+        function wipeData() { update(ref(db, 'admins/' + adminId), { current: 0, lastToken: 0, history: null, skipped: null }); closeProfile(); }
         
-        window.saveSettings = () => {
-            const name = document.getElementById('settingOrgName').value;
-            const time = document.getElementById('settingTime').value;
-            update(ref(db, 'admins/' + adminId), { name: name, avgTime: parseInt(time) });
-            closeProfile();
-        }
+        window.openProfile = () => { document.getElementById('profileModal').classList.remove('hidden'); if(currentData) { document.getElementById('settingOrgName').value = currentData.name || ""; document.getElementById('settingTime').value = currentData.avgTime || 5; } }
+        window.closeProfile = () => document.getElementById('profileModal').classList.add('hidden');
+        window.saveSettings = () => { const name = document.getElementById('settingOrgName').value; const time = document.getElementById('settingTime').value; update(ref(db, 'admins/' + adminId), { name: name, avgTime: parseInt(time) }); closeProfile(); }
+        window.logout = () => { if(confirm("Logout?")) signOut(auth).then(() => window.location.replace("index.html")); }
+        window.showQRCode = () => { document.getElementById('qrModal').classList.remove('hidden'); const container = document.getElementById('qrcode'); container.innerHTML = ""; const joinLink = window.location.origin + "/customer.html?q=" + adminId; new QRCode(container, { text: joinLink, width: 200, height: 200, colorDark : "#4f46e5", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H }); }
 
-        window.logout = () => { if(confirm("Logout?")) signOut(auth).then(() => window.location.href = "index.html"); }
-
-        // --- QR CODE ---
-        window.showQRCode = () => {
-            document.getElementById('qrModal').classList.remove('hidden');
-            const container = document.getElementById('qrcode');
-            container.innerHTML = "";
-            const joinLink = window.location.origin + "/customer.html?q=" + adminId;
-            new QRCode(container, { text: joinLink, width: 200, height: 200, colorDark : "#2563eb", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
+        window.openHistoryModal = () => { document.getElementById('historyModal').classList.remove('hidden'); showTodayHistory(); }
+        window.showTodayHistory = () => { document.getElementById('historyTitle').innerText = "Today's History"; const list = document.getElementById('fullHistoryList'); if(!currentData || !currentData.history) { list.innerHTML = "<p style='text-align:center; color:#999; margin-top:20px;'>No history for today.</p>"; return; } renderList(currentData.history); }
+        window.showArchives = () => {
+            document.getElementById('historyTitle').innerText = "Past Records";
+            const list = document.getElementById('fullHistoryList'); list.innerHTML = "<p style='text-align:center; padding:20px'>Loading...</p>";
+            get(ref(db, 'admins/' + adminId + '/archives')).then((snapshot) => {
+                if(!snapshot.exists()) { list.innerHTML = "<p style='text-align:center; color:#999; margin-top:20px;'>No archived records yet.</p>"; return; }
+                list.innerHTML = "";
+                Object.keys(snapshot.val()).sort().reverse().forEach(dateKey => {
+                    const folder = document.createElement('div'); folder.className = "archive-folder";
+                    folder.innerHTML = `<span><i class="fas fa-calendar-alt"></i> ${dateKey}</span> <i class="fas fa-chevron-right"></i>`;
+                    folder.onclick = () => { document.getElementById('historyTitle').innerText = dateKey; renderList(snapshot.val()[dateKey]); };
+                    list.appendChild(folder);
+                });
+            });
         }
+        function renderList(historyObject) { const list = document.getElementById('fullHistoryList'); list.innerHTML = ""; Object.values(historyObject).reverse().forEach(item => { const row = document.createElement('div'); row.className = "history-row"; row.innerHTML = `<div><div style="font-weight:700; color:#1e293b;">${item.name || "Customer"}</div><div class="date-badge">${item.time}</div></div><div style="font-size:1.2rem; font-weight:800; color:var(--brand-color);">#${item.num}</div>`; list.appendChild(row); }); }
     </script>
 </body>
 </html>

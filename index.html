@@ -11,178 +11,101 @@
     
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="logo.png">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
     <style>
-        :root {
-            --brand-color: #2563eb; 
-            --brand-dark: #1e40af;
-            --brand-light: #eff6ff;
-            /* Premium App Background */
-            --bg-gradient: radial-gradient(circle at top center, #f1f5f9, #e2e8f0);
-        }
-
+        :root { --brand-color: #4f46e5; --bg-gradient: radial-gradient(circle at top center, #f8fafc, #e2e8f0); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--bg-gradient); color: #1e293b; min-height: 100vh; }
 
         .screen { max-width: 480px; margin: 0 auto; padding: 20px; position: relative; }
-
-        /* HEADER */
         .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .menu-btn { width: 45px; height: 45px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; color: var(--brand-color); }
         
-        /* MENU BUTTON */
-        .menu-btn {
-            width: 45px; height: 45px; border-radius: 50%; background: white;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer;
-            transition: 0.2s; color: var(--brand-color);
-        }
-        .menu-btn:active { transform: scale(0.95); }
-
-        /* SCANNER CARD */
-        #home-banner-container {
-            width: 100%; height: 380px;
-            background: linear-gradient(180deg, var(--brand-color) 0%, var(--brand-dark) 100%);
-            border-radius: 35px;
-            position: relative; overflow: hidden;
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.25);
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; margin-top: 10px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        #home-banner-container:active { transform: scale(0.98); }
-
-        .scan-icon-box {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 120px; height: 120px; border-radius: 50%;
-            display:flex; align-items:center; justify-content:center;
-            margin: 0 auto 15px auto;
-        }
-
+        #home-banner-container { width: 100%; height: 380px; background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 50%, #9333ea 100%); border-radius: 35px; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(79, 70, 229, 0.3); display: flex; align-items: center; justify-content: center; margin-top: 10px; }
+        .scan-icon-box { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.3); width: 120px; height: 120px; border-radius: 50%; display:flex; align-items:center; justify-content:center; margin: 0 auto 15px auto; }
         #scan-ui { color: white; text-align: center; width: 100%; z-index: 10; pointer-events: none; }
-        
-        #scanner-wrapper { width: 100%; height: 100%; background: black; position: absolute; top: 0; left: 0; z-index: 5; display: none; border-radius: 35px; }
+        #scanner-wrapper { width: 100%; height: 100%; background: black; position: absolute; top: 0; left: 0; z-index: 5; display: none; }
         #scanner-wrapper.active { display: block; }
         #reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; border-radius: 35px; }
 
-        /* HISTORY */
-        .history-title { display: flex; justify-content: space-between; align-items: center; margin-top: 35px; margin-bottom: 15px; padding: 0 5px; }
-        .history-scroll { display: flex; flex-direction: column; gap: 12px; }
-        
-        .history-item {
-            background: white; padding: 15px; border-radius: 20px;
-            display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            transition: 0.2s;
-        }
-        .history-item:active { transform: scale(0.98); background: var(--brand-light); }
-        .history-avatar {
-            width: 50px; height: 50px; background: var(--brand-light); color: var(--brand-color);
-            border-radius: 15px; display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1.1rem;
-        }
+        .history-item { background: white; padding: 15px; border-radius: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 12px; }
+        .history-avatar { width: 50px; height: 50px; background: #eef2ff; color: var(--brand-color); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 
-        /* MODALS & MENUS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: flex; align-items: end; justify-content: center; backdrop-filter: blur(5px); }
         .hidden { display: none; }
-        
-        .bottom-sheet { 
-            background: white; width: 100%; max-width: 480px; 
-            padding: 30px; border-radius: 30px 30px 0 0; 
-            text-align: center; position: relative; 
-            animation: slideUp 0.3s ease-out;
-        }
+        .bottom-sheet { background: white; width: 100%; max-width: 480px; padding: 30px; border-radius: 30px 30px 0 0; animation: slideUp 0.3s ease-out; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .btn-primary { background: var(--brand-color); color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .menu-option { padding: 15px; border-radius: 15px; background: #f8fafc; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; font-weight: 600; cursor: pointer; }
 
-        .menu-option {
-            padding: 15px; border-radius: 15px; background: #f8fafc; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 15px; font-weight: 600; cursor: pointer;
+        /* VIDEO SPLASH SCREEN */
+        #splash-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #0b1120; /* Dark background matches your video */
+            z-index: 9999; display: flex; justify-content: center; align-items: center; 
+            transition: opacity 0.8s ease; 
         }
-        .menu-option:active { background: #e2e8f0; }
-
-        .btn-primary { background: var(--brand-color); color: white; border: none; padding: 15px 30px; border-radius: 15px; font-weight: 600; width: 100%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        #splash-video {
+            width: 100%; height: 100%; object-fit: cover;
+            position: absolute; z-index: 10000;
+        }
     </style>
 </head>
 <body>
 
+    <div id="splash-screen">
+        <video id="splash-video" autoplay muted playsinline>
+            <source src="intro.mp4" type="video/mp4">
+        </video>
+    </div>
+
     <div class="screen">
-        
         <div class="app-header">
             <img src="logo.png" style="height: 40px; object-fit: contain;" onerror="this.style.display='none'">
-            
-            <div class="menu-btn" onclick="openMenu()">
-                <i class="fas fa-bars"></i>
-            </div>
+            <div class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></div>
         </div>
         
         <div id="home-banner-container" onclick="toggleScanner()">
             <div id="scan-ui">
-                <div class="scan-icon-box">
-                    <i class="fas fa-qrcode" style="font-size: 55px;"></i>
-                </div>
+                <div class="scan-icon-box"><i class="fas fa-qrcode" style="font-size: 55px;"></i></div>
                 <h3 style="font-weight: 700; font-size: 1.5rem; margin: 0 0 5px 0;">Tap to Scan</h3>
                 <p style="opacity: 0.8; font-size: 0.9rem; margin: 0;">Join Queue</p>
             </div>
-
             <div id="scanner-wrapper">
                 <div id="reader"></div>
-                <div style="position: absolute; bottom: 25px; width: 100%; text-align: center; color: white; font-size: 0.9rem; font-weight: 500; pointer-events: none; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                    Tap anywhere to close
-                </div>
+                <div style="position: absolute; bottom: 25px; width: 100%; text-align: center; color: white; font-size: 0.9rem; font-weight: 500; pointer-events: none;">Tap to close</div>
             </div>
         </div>
 
-        <div class="history-title">
-            <span>Recent Places</span>
-        </div>
-        <div id="visitedList" class="history-scroll">
-            <div style="text-align: center; width: 100%; color: #94a3b8; font-size: 0.9rem; padding: 30px;">
-                No recent history
-            </div>
-        </div>
-
+        <div style="margin-top: 35px; margin-bottom: 15px; font-weight: 600; padding: 0 5px;">Recent Places</div>
+        <div id="visitedList"><div style="text-align: center; color: #94a3b8; padding: 30px;">No recent history</div></div>
     </div>
 
     <div id="menuModal" class="modal-overlay hidden" onclick="if(event.target === this) closeMenu()">
         <div class="bottom-sheet">
-            <h3 style="margin-top: 0; color: #1e293b; margin-bottom: 20px;">Menu</h3>
-            
-            <div class="menu-option" onclick="openAdminLogin()">
-                <div style="width: 40px; height: 40px; background: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-color);"><i class="fas fa-store"></i></div>
-                <span>Partner Login</span>
-            </div>
-
-            <div class="menu-option" onclick="clearHistory()">
-                <div style="width: 40px; height: 40px; background: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ef4444;"><i class="fas fa-trash-alt"></i></div>
-                <span>Clear History</span>
-            </div>
-
-            <button onclick="closeMenu()" style="margin-top: 10px; background: none; border: none; color: #64748b; font-weight: 600; padding: 10px;">Close</button>
+            <h3 style="margin-top: 0;">Menu</h3>
+            <div class="menu-option" onclick="openAdminLogin()"><i class="fas fa-store" style="color:var(--brand-color)"></i> Partner Login</div>
+            <div class="menu-option" onclick="clearHistory()"><i class="fas fa-trash-alt" style="color:#ef4444"></i> Clear History</div>
+            <button onclick="closeMenu()" style="width:100%; padding:15px; background:none; border:none; color:#64748b; font-weight:600;">Close</button>
         </div>
     </div>
 
     <div id="adminModal" class="modal-overlay hidden">
         <div class="bottom-sheet">
-            <div style="width: 70px; height: 70px; background: var(--brand-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
-                <i class="fas fa-user-shield" style="font-size: 30px; color: var(--brand-color);"></i>
-            </div>
-            <h3 style="margin-top: 0;">Partner Access</h3>
-            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 25px;">Login to manage your queue</p>
-            <button class="btn-primary" onclick="handleGoogleLogin()">
-                <i class="fab fa-google"></i> Login with Google
-            </button>
-            <button onclick="closeAdminLogin()" style="margin-top: 15px; background: none; border: none; color: #64748b;">Cancel</button>
+            <h3 style="margin-top: 0; text-align: center;">Partner Access</h3>
+            <button class="btn-primary" onclick="handleGoogleLogin()"><i class="fab fa-google"></i> Login with Google</button>
+            <button onclick="closeAdminLogin()" style="width:100%; padding:15px; margin-top:10px; background:none; border:none; color:#64748b;">Cancel</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = { apiKey: "AIzaSyCYMTf26H1JRlA1QRJjzzlBmnQozLBzf0U", authDomain: "smartq-app-7807b.firebaseapp.com", projectId: "smartq-app-7807b" };
         const app = initializeApp(firebaseConfig);
@@ -192,42 +115,63 @@
         let html5QrcodeScanner = null;
         let isScanning = false;
 
-        // UI FUNCTIONS
-        window.openMenu = () => document.getElementById('menuModal').classList.remove('hidden');
-        window.closeMenu = () => document.getElementById('menuModal').classList.add('hidden');
-        
-        window.openAdminLogin = () => { closeMenu(); document.getElementById('adminModal').classList.remove('hidden'); }
-        window.closeAdminLogin = () => document.getElementById('adminModal').classList.add('hidden');
+        // --- NEW SYNCHRONIZATION LOGIC ---
+        // We wait for BOTH video and auth before doing anything
+        const video = document.getElementById('splash-video');
+        let isVideoDone = false;
+        let isAuthReady = false;
+        let loggedInUser = null;
 
-        window.clearHistory = () => {
-            if(confirm("Clear your recent places?")) {
-                localStorage.removeItem('smartq_visited_places');
-                window.location.reload();
-            }
-        }
-
-        // SCANNER LOGIC
-        window.toggleScanner = function() {
-            if (isScanning) stopScanner();
-            else startScanner();
+        // 1. Listen for Video End (This usually takes 7 seconds)
+        video.onended = () => {
+            console.log("Video Finished");
+            isVideoDone = true;
+            tryTransition();
         };
 
+        // Fallback: If video gets stuck, force finish after 8 seconds
+        setTimeout(() => { if(!isVideoDone) { isVideoDone = true; tryTransition(); } }, 8000);
+
+        // 2. Listen for Auth (This usually takes 1 second)
+        onAuthStateChanged(auth, (user) => {
+            console.log("Auth Ready");
+            isAuthReady = true;
+            loggedInUser = user;
+            tryTransition();
+        });
+
+        // 3. The Gatekeeper: Checks if we can let the user in yet
+        function tryTransition() {
+            if (isVideoDone && isAuthReady) {
+                const splash = document.getElementById('splash-screen');
+                if (loggedInUser) {
+                    // Logged in? Swap to dashboard
+                    window.location.replace("admin_dashboard.html");
+                } else {
+                    // Not logged in? Fade splash and show buttons
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.remove(), 800);
+                }
+            }
+        }
+        // ---------------------------------
+
+        window.openMenu = () => document.getElementById('menuModal').classList.remove('hidden');
+        window.closeMenu = () => document.getElementById('menuModal').classList.add('hidden');
+        window.openAdminLogin = () => { closeMenu(); document.getElementById('adminModal').classList.remove('hidden'); }
+        window.closeAdminLogin = () => document.getElementById('adminModal').classList.add('hidden');
+        window.clearHistory = () => { if(confirm("Clear history?")) { localStorage.removeItem('smartq_visited_places'); window.location.reload(); } }
+
+        window.toggleScanner = function() { if (isScanning) stopScanner(); else startScanner(); };
         window.startScanner = function() {
             isScanning = true;
             document.getElementById('scan-ui').classList.add('hidden');
             document.getElementById('scanner-wrapper').classList.add('active');
-
             if(!html5QrcodeScanner) html5QrcodeScanner = new Html5Qrcode("reader");
-
             html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 }, 
-                (decodedText) => {
-                    stopScanner();
-                    if(decodedText.includes("customer.html?q=")) window.location.href = decodedText;
-                    else alert("Invalid Code: " + decodedText);
-                }, () => {} 
+                (decodedText) => { stopScanner(); window.location.href = decodedText; }, () => {} 
             ).catch(err => { alert("Camera Error: " + err); stopScanner(); });
         };
-
         window.stopScanner = function() {
             isScanning = false;
             document.getElementById('scan-ui').classList.remove('hidden');
@@ -235,37 +179,23 @@
             if(html5QrcodeScanner) html5QrcodeScanner.stop().then(() => html5QrcodeScanner.clear()).catch(e => console.log(e));
         };
 
-        window.handleGoogleLogin = () => {
-            signInWithPopup(auth, provider).then(() => window.location.href = "admin_dashboard.html").catch(e => alert(e.message));
+        window.handleGoogleLogin = () => { 
+            signInWithPopup(auth, provider)
+            .then(() => window.location.replace("admin_dashboard.html"))
+            .catch(e => alert(e.message)); 
         };
 
-        // LOAD HISTORY
         const visited = JSON.parse(localStorage.getItem('smartq_visited_places') || "[]");
-        const list = document.getElementById('visitedList');
         if(visited.length > 0) {
-            list.innerHTML = "";
+            const list = document.getElementById('visitedList'); list.innerHTML = "";
             visited.reverse().forEach(place => {
-                const item = document.createElement('div');
-                item.className = "history-item";
-                const initials = place.name.substring(0, 2).toUpperCase();
-                item.innerHTML = `
-                    <div class="history-avatar">${initials}</div>
-                    <div class="history-name" style="font-weight: 600; color: #334155;">${place.name}</div>
-                `;
-                item.onclick = (e) => { e.stopPropagation(); window.location.href = `customer.html?q=${place.id}`; };
+                const item = document.createElement('div'); item.className = "history-item";
+                item.innerHTML = `<div class="history-avatar">${place.name.substring(0, 2).toUpperCase()}</div><div style="font-weight: 600;">${place.name}</div>`;
+                item.onclick = () => { window.location.href = `customer.html?q=${place.id}`; };
                 list.appendChild(item);
             });
         }
     </script>
-
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('Service Worker Registered!', reg.scope))
-                    .catch(err => console.log('Service Worker Failed:', err));
-            });
-        }
-    </script>
+    <script>if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); }); }</script>
 </body>
 </html>
